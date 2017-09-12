@@ -2,7 +2,7 @@
 # @Author: bingo_zhou
 # @Date:   2017-09-11 16:38:42
 # @Last Modified by:   bingo_zhou
-# @Last Modified time: 2017-09-12 12:24:14
+# @Last Modified time: 2017-09-12 13:54:37
 
 """
 Examples:
@@ -16,30 +16,33 @@ Given "pwwkew", the answer is "wke", with the length of 3. Note that the answer 
 from time import time
 
 class Solution(object):
-    def get_start(self, string):
-        longest = ""
-        l = list(string)
-        while len(l) != len(set(l)):
-            half = len(l)/2
-            l = l[:half]
-        if len(l) < len(string):
-            for i in range(len(l), len(string)):
-                if len(string[:i]) == len(set(string[:i])):
-                    continue
-                return string[:i-1]
-        return l
+
+    def get_max(self, string, longest):
+        index = longest
+        if index >= len(string):
+            return index
+
+        i = 1
+        while index + i <= len(string):
+            if len(list(string[:index + i ])) == len(set(string[:index + i ])):
+                i += 1
+                continue
+            break
+        return index + i - 1
 
     def lengthOfLongestSubstring(self, s):
         """
         :type s: str
         :rtype: int
         """
-        if len(s) == 1 or len(set(s)) == 1:
-            return 1
+        if len(s) == 0: return 0
+        if len(s) == 1 or len(set(s)) == 1: return 1
 
-        end = s[-1]
-        while end == s[0] and len(s) > 1:
+        start = s[0]
+        while start == s[-1] and len(s) > 1:
             s = s[:-1]
+
+        # to get more convienient substring length to small the count amount
         split = s[0]
         substrings = s.split(split)
         substrings = [split + el for el in substrings if el]
@@ -48,17 +51,17 @@ class Solution(object):
         for i in substrings:
             if len(i) == len(set(i)):
                 longest = len(i)
+        # print("{}, {}".format(longest, substrings))
 
-        for i in substrings:
-            if len(i) > longest:
-                for j in range(len(i)):
-                    new = self.get_start(i[j:])
-                    if len(new) > longest:
-                        longest = len(new)
+        for j in range(len(s)):
+            new = self.get_max(s[j:], longest)
+
+            if new > longest:
+                longest = new
         return longest
 
 if __name__ == "__main__":
-    string = 'werhwqker'
+    string = 'dvdf'
     
     a = time()
     r = Solution().lengthOfLongestSubstring(string)
