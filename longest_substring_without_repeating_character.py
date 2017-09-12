@@ -2,7 +2,7 @@
 # @Author: bingo_zhou
 # @Date:   2017-09-11 16:38:42
 # @Last Modified by:   bingo_zhou
-# @Last Modified time: 2017-09-12 11:04:06
+# @Last Modified time: 2017-09-12 11:28:43
 
 """
 Examples:
@@ -22,9 +22,9 @@ class Solution(object):
             l = l[:half]
         if len(l) < len(string):
             for i in range(len(l), len(string)):
-                if len(string[:i]) == len(set(string[:i])):
+                if len(string[:i+1]) == len(set(string[:i+1])):
                     continue
-                return string[:i-1]
+                return string[:i]
         return l
 
     def lengthOfLongestSubstring(self, s):
@@ -40,6 +40,6 @@ class Solution(object):
         return len(longest)
 
 if __name__ == "__main__":
-    string = "abcajserwera"
+    string = "wwercbb"
     r = Solution().lengthOfLongestSubstring(string)
     print r
