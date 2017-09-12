@@ -2,7 +2,7 @@
 # @Author: bingo_zhou
 # @Date:   2017-09-11 16:38:42
 # @Last Modified by:   bingo_zhou
-# @Last Modified time: 2017-09-12 14:12:19
+# @Last Modified time: 2017-09-12 14:16:26
 
 """
 Examples:
@@ -44,6 +44,14 @@ class Solution(object):
             split = sets[1]
 
         # to get more convienient substring length to small the count amount
+        """
+        Note here, we can provided more wayt to choose many split element to
+        get the longest number used to check out the longest substring detailed
+
+        Due to the sort of checking the string,
+        we can depend on struct like Plug to make the all functions work like a 
+        flow ...
+        """
         split = s[0]
         substrings = s.split(split)
         substrings = [split + el for el in substrings if el]
