@@ -2,7 +2,7 @@
 # @Author: bingo_zhou
 # @Date:   2017-09-11 16:38:42
 # @Last Modified by:   bingo_zhou
-# @Last Modified time: 2017-09-12 13:54:37
+# @Last Modified time: 2017-09-12 14:12:19
 
 """
 Examples:
@@ -38,9 +38,10 @@ class Solution(object):
         if len(s) == 0: return 0
         if len(s) == 1 or len(set(s)) == 1: return 1
 
-        start = s[0]
-        while start == s[-1] and len(s) > 1:
-            s = s[:-1]
+        sets = list(set(s))
+        split = sets[0]
+        while split == s[-1] and len(s) > 1:
+            split = sets[1]
 
         # to get more convienient substring length to small the count amount
         split = s[0]
@@ -61,7 +62,7 @@ class Solution(object):
         return longest
 
 if __name__ == "__main__":
-    string = 'dvdf'
+    string = "aaca"
     
     a = time()
     r = Solution().lengthOfLongestSubstring(string)
