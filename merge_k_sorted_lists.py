@@ -66,7 +66,10 @@ def creat_node():
     ll.next = l
 
     return [lll]
-    
+"""
+Also we can use one by one, or something, this one kind of slow,
+because first change ListNode to list, so we can skip this step.
+"""  
 
 if __name__ == "__main__":
     lists = [[], []]
