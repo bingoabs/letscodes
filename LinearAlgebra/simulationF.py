@@ -41,20 +41,25 @@ def subtraction(index, subed, sub):
     return subed
 
 def purified(matrix):
+    dims = len(matrix)
+    for i in range(dims - 1, -1):
+        l = matrix[i]
+        if l[i] == 1.0:
+            
     return matrix
 
 
 if __name__ == "__main__":
-    # data = [
-    #     # {speed, resistance}
-    #     (0, 0), 
-    #     (2, 2.9), 
-    #     (4, 14.8), 
-    #     (6, 39.6), 
-    #     (8, 74.3), 
-    #     (10, 119)
-    # ]
-    data = [(1, 6), (2, 15), (3, 28)]
+    data = [
+        # {speed, resistance}
+        (0, 0), 
+        (2, 2.9), 
+        (4, 14.8), 
+        (6, 39.6), 
+        (8, 74.3), 
+        (10, 119)
+    ]
+    # data = [(1, 6), (2, 15), (3, 28)]
     matrix = create_matrix(data)
     matrix = count_matrix(matrix)
     matrix = purified(matrix)
