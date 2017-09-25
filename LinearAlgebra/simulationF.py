@@ -42,10 +42,13 @@ def subtraction(index, subed, sub):
 
 def purified(matrix):
     dims = len(matrix)
-    for i in range(dims - 1, -1):
+    for i in range(dims - 1, 0, -1):
         l = matrix[i]
-        if l[i] == 1.0:
-            
+        if l[i] != 1.0:
+            continue
+        for j in range(0, i):
+            matrix[j] = subtraction(i, matrix[j], l)
+
     return matrix
 
 
@@ -62,6 +65,6 @@ if __name__ == "__main__":
     # data = [(1, 6), (2, 15), (3, 28)]
     matrix = create_matrix(data)
     matrix = count_matrix(matrix)
-    matrix = purified(matrix)
+    # matrix = purified(matrix)
     pprint(matrix)
 
