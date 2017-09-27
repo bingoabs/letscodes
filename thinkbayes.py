@@ -1739,3 +1739,145 @@ def LogBinomialCoef(n, k):
     """
     return n * log(n) - k * log(k) - (n - k) * log(n - k)
 
+
+class Cookie(Pmf):
+    def __init__(self, hypos):
+        Pmf.__init__(self)
+        for hypo in hypos:
+            self.Set(hypo, 1)
+        self.Normalize()
+
+    def Update(self, data):
+        for hypo in self.Values():
+            like = self.Likelihood(data, hypo)
+            self.Mult(hypo, like)
+        self.Normalize()
+
+    mixes = {
+        "Bowl1": dict(vanilla=0.75, chocolate=0.25),
+        "Bowl2": dict(vanilla=0.5, chocolate=0.5),
+    }
+    def Likelihood(self, data, hypo):
+        mix = self.mixes[hypo]
+        like = mix[data]
+        return like
+
+
+
+class monty(Pmf):
+
+    def __init__(self, hypos):
+        Pmf.__init__(self)
+        for hypo in hypos:
+            self.Set(hypo, 1)
+        self.Normalize()
+
+    def Update(self, data):
+        for hypo in self.Values():
+            like = self.Likelihood(data, hypo)
+            self.Mult(hypo, like)
+        self.Normalize()
+
+    def Likelihood(self, data, hypo):
+        if hypo == data:
+            return 0
+        elif hypo == "A":
+            return 0.5
+        else:
+            return 1
+
+
+
+class Monty(Suite):
+    def Likelihood(self, data, hypo):
+        if hypo == data:
+            return 0
+        elif hypo == "A":
+            return 0.5
+        else:
+            return 1
+
+
+
+class M_and_M(Suite):
+    """
+    need to record the color mixed situation 
+    """
+    mix94=dict(brown=30,
+               yellow=20,
+               red=20,
+               green=10,
+               orange=10,
+               tan=10)
+
+    mix96=dict(blue=24,
+               green=20,
+               orange=16,
+               yellow=14,
+               red=13,
+               brown=13)
+
+    hypoA=dict(bag1=mix94, bag2=mix96)
+    hypoB=dict(bag1=mix96, bag2=mix94)
+    hypotheses=dict(A=hypoA, B=hypoB)
+
+    # in fact, can image random choose two bags from a lot of bag1s and bag2s
+    # like:
+    # hypoC=dict(bag1=mix94, bag2=mix94)
+    # hypoD=dict(bag1=mix96, bag2=mix96)
+
+    def Likelihood(self, data, hypo):
+        bag, color = data
+        mix = self.hypotheses[hypo][bag]
+        # better: like=mix.get(color, 0), to show the exception as probability
+        like=mix[color]
+        return like
+
+class Cookie(Pmf):
+
+    mixes = {
+        "Bowl1": dict(vanilla=0.75, chocolate=0.25),
+        "Bowl2": dict(vanilla=0.5, chocolate=0.5),
+    }
+    def Likelihood(self, data, hypo):
+        mix = self.mixes[hypo]
+        like = mix[data]
+        return like
+
+
+class Cookie2(Pmf):
+    """
+    deal the result due to the fetched cookie would not give back
+    here, I will just simple subtract the cookie from the most possible bow
+    **************
+    during the test, find something interesting, can be some trick
+    """
+    mixes = {
+        "Bowl1": dict(vanilla=75, chocolate=25),
+        "Bowl2": dict(vanilla=50, chocolate=50),
+    }
+
+    def __init__(self, hypos):
+        Pmf.__init__(self)
+        for hypo in hypos:
+            self.Set(hypo, 1)
+        self.Normalize()
+
+    def Update(self, data):
+        for hypo in self.Values():
+            like = self.Likelihood(data, hypo)
+            self.Mult(hypo, like)
+        self.Normalize()
+        self.Delete_data(data)
+
+    def Likelihood(self, data, hypo):
+        mix = self.mixes[hypo]
+        like = mix[data]
+        return like
+
+    def Delete_data(self, data):
+        prob, bowl = max((prob, val) for val, prob in self.Items())
+        new_bowl = self.mixes[bowl]
+        new_bowl[data] -= 1
+        self.mixes[bowl] = new_bowl
+
