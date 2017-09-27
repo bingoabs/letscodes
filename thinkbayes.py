@@ -1881,3 +1881,35 @@ class Cookie2(Pmf):
         new_bowl[data] -= 1
         self.mixes[bowl] = new_bowl
 
+class Dice(Suite):
+    def Likelihood(self, data, hypo):
+        if hypo < data:
+            return 0
+        else:
+            return 1.0/hypo
+
+class Train(Dice):
+
+    def __init__(self, hypos, alpha=1.0, a=1):
+        Pmf.__init__(self)
+        for hypo in hypos:
+            self.Set(hypo, a*hypo**(-alpha))
+        self.Normalize()
+
+    def Percentile(self, percentage):
+        p = percentage / 100.0
+        total = 0
+        for val, prop in self.Items():
+            total += prob
+            if total >= p:
+                return val
+        raise ValueError("Maybe do not normalized or something wrong")
+
+
+def Mean(suite):
+    total = 0
+    for hypo, prob in suite.Items():
+        total += hypo*prob
+    return total
+
+
