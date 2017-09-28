@@ -1,3 +1,5 @@
+#!/usr/bin/python
+#--*-- coding: utf-8
 """This file contains code for use with "Think Bayes",
 by Allen B. Downey, available from greenteapress.com
 
@@ -1914,12 +1916,13 @@ class Train2(Train):
             return hypo
 
 class Euro(Suite):
-    """
+    u"""
     值得注意的一点：
     单独一个先验概率的结果意义不大，
     必须将先验概率可选的所有集合，至少是有意义的可选集合进行贝叶斯实践，
     即进行数据训练， 进而可以认为 后验概率集合的加和结果为一个完备集合，
     从而可以估计每一种先验概率的可能性， 从而根据最大概率值得到最优解。e
+    否则，一个先验概率的训练结果，独立于天地之间，不可比较，亦不可验证， 毫无用处w
     """
     def Likelihood(self, data, hypo):
         x = hypo
@@ -1928,10 +1931,72 @@ class Euro(Suite):
         else:
             return 1 - x/100.0
 
+    def UpdateSet(self, dataset):
+        for data in dataset:
+            for hypo in self.Values():
+                like = self.Likelihood(data, hypo)
+                self.Mult(hypo, like)
+        return self.Normalize()
+
+    def Likelihood2(self, data, hypo):
+        """
+        heads, tails = 140, 110
+        suite.Update((heads, tails))...
+
+        """
+        x = hypo/100.0
+        heads, tails = data
+        like = x**head * (1-x)**tails
+        return like
+
+
 def Mean(suite):
     total = 0
     for hypo, prob in suite.Items():
         total += hypo*prob
     return total
 
+
+def showLine(x, y):
+    import matplotlib.pyplot as plt
+    plt.plot(x, y)
+    plt.show()
+
+
+def MaximumLikelihood(pmf):
+    prob, val = max((prob, val) for val, prob in pmf.Items())
+    return val
+
+def TrianglePrior():
+    """
+    used to prove 先验湮没 现象:
+    如果有足够的数据， 即便在先验分布上持有不同观点，那么最终还是得到趋同的后验概率
+    前提是： 足够多的数据！
+    并且由于设置先验概率为0，将直接导致似然度亦为0， 所以：
+    应当避免对任何假设的先验概率设置为0，否则再大的数据集也无法收敛结果到一个统一的期望
+    这是 克伦威尔法则 的基础。
+    """
+    suite = Euro()
+    for x in range(0, 51):
+        suite.Set(x, x)
+    for x in range(51, 101):
+        suite.Set(x, 100 - x)
+    suite.Normalize()
+
+
+class Beta2(object):
+    def __init__(self, alpha=1, beta=1):
+        self.alpha=alpha
+        self.beta=beta
+
+    def Update(self, data):
+        heads, tails = data 
+        self.alpha += heads 
+        self.beta += tails
+
+    def Mean(self):
+        return float(self.alpha) / (self.alpha + self.beta)
+
+    def EvalPdf(self, x):
+        return x**(self.alpha-1)*(1-x)**(self.beta-1)
 
