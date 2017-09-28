@@ -1905,6 +1905,28 @@ class Train(Dice):
                 return val
         raise ValueError("Maybe do not normalized or something wrong")
 
+class Train2(Train):
+
+    def Likelihood(self, data, hypo):
+        if hypo < data:
+            return 0
+        else:
+            return hypo
+
+class Euro(Suite):
+    """
+    值得注意的一点：
+    单独一个先验概率的结果意义不大，
+    必须将先验概率可选的所有集合，至少是有意义的可选集合进行贝叶斯实践，
+    即进行数据训练， 进而可以认为 后验概率集合的加和结果为一个完备集合，
+    从而可以估计每一种先验概率的可能性， 从而根据最大概率值得到最优解。e
+    """
+    def Likelihood(self, data, hypo):
+        x = hypo
+        if data == 'H':
+            return x/100.0
+        else:
+            return 1 - x/100.0
 
 def Mean(suite):
     total = 0
