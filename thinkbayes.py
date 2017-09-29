@@ -1957,12 +1957,6 @@ def Mean(suite):
     return total
 
 
-def showLine(x, y):
-    import matplotlib.pyplot as plt
-    plt.plot(x, y)
-    plt.show()
-
-
 def MaximumLikelihood(pmf):
     prob, val = max((prob, val) for val, prob in pmf.Items())
     return val
@@ -2042,7 +2036,7 @@ def TrianglePrior2(suite):
     suite.Normalize()
     return suite
 
-class Redditor(suite):
+class Redditor(Suite):
     """
     every redditor has a voted dict, and every link has quality mark
     now we treat the sum of the links as the mark of a redditor.
@@ -2070,6 +2064,36 @@ class Save2(object):
     def Probability2(yes, no): return yes/(yes + no)
 
     
+class Die(Pmf):
+    def __init__(self, sides):
+        Pmf.__init__(self)
+        for x in xrange(1, sides+1):
+            self.Set(x, 1)
+        self.Normalize()
+
+    def SmapleSum(dists, n):
+        pmf = MakePmfFromList(RandomSum(dists) for i in xrange(n))
+        return pmf 
+
+    def RandomSum(dists):
+        total = sum(dist.Random() for dist in dists)
+        return total
+
+class Pmf3(Pmf):
+    def __add__(self, other):
+        pmf = Pmf()
+        for v1, p1 in self.Items():
+            for v2, p2 in other.Items():
+                pmf.Incr(v1+v2, p1*p2)
+        return pmf
+
+
+
+def showLine(suite):
+    import matplotlib.pyplot as plt
+    x, y = zip(*suite.Items())
+    plt.plot(x, y)
+    plt.show()
 
 
 
