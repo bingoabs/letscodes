@@ -2000,3 +2000,77 @@ class Beta2(object):
     def EvalPdf(self, x):
         return x**(self.alpha-1)*(1-x)**(self.beta-1)
 
+class Euro2(Suite):
+    def Likelihood(self, data, hypo):
+        x = hypo
+        if data == 'H':
+            return x/100.0*self.offset
+        else:
+            return (1 - x/100.0)*self.offset
+
+    def UpdateSet(self, dataset, offset):
+        self.offset = offset
+        for data in dataset:
+            for hypo in self.Values():
+                like = self.Likelihood(data, hypo)
+                self.Mult(hypo, like)
+        return self.Normalize()
+
+    def Likelihood2(self, data, hypo):
+        """
+        heads, tails = 140, 110
+        suite.Update((heads, tails))...
+        """
+        x = hypo/100.0
+        heads, tails = data
+        like = x**head * (1-x)**tails
+        return like
+
+def TrianglePrior2(suite):
+    """
+    used to prove 先验湮没 现象:
+    如果有足够的数据， 即便在先验分布上持有不同观点，那么最终还是得到趋同的后验概率
+    前提是： 足够多的数据！
+    并且由于设置先验概率为0，将直接导致似然度亦为0， 所以：
+    应当避免对任何假设的先验概率设置为0，否则再大的数据集也无法收敛结果到一个统一的期望
+    这是 克伦威尔法则 的基础。
+    """
+    for x in range(0, 51):
+        suite.Set(x, x)
+    for x in range(51, 101):
+        suite.Set(x, 100 - x)
+    suite.Normalize()
+    return suite
+
+class Redditor(suite):
+    """
+    every redditor has a voted dict, and every link has quality mark
+    now we treat the sum of the links as the mark of a redditor.
+    in fact, build this model maybe need more time, so let it more clear
+    """
+    rs = {"l1": 1, "l2": 2, "l3": 3, "l4": 4}
+    ls = {"l1": 1, "l2": 1, "l3": 1, "l4": 1}
+
+    def Update(self, data):
+        r, l = data
+        like = self.Likelihood(r, l)
+
+    def Likelihood(self, r):
+        pass
+
+class Save2(object):
+    """
+    if the probality is low, named odds against, 
+    other situation named odds in favor.
+    """
+    def Odds(p): return p/(1-p)
+
+    def Probability(o): return o/(o+1)
+
+    def Probability2(yes, no): return yes/(yes + no)
+
+    
+
+
+
+
