@@ -5,14 +5,22 @@
 import matplotlib.pyplot as plt
 
 
-def showLine(suite):
-    x, y = zip(*suite.Items())
-    plt.plot(x, y)
-    plt.show()
+class Plot(object):
+    def __init__(self, name="default_name"):
+        self.name = name
 
-
-def showMuli(suites):
-    for suite in suites:
-        x, y = zip(*suite.Items())
+    def Line(self, suite):
+        items = sorted(suite.Items(), key=lambda item: item[0])
+        x, y = zip(*items)
         plt.plot(x, y)
-    plt.show()
+        plt.show()
+
+
+    def MuliLine(self, suites):
+        for suite in suites:
+            items = sorted(suite.Items(), key=lambda item: item[0])
+            x, y = zip(*items)
+
+            plt.plot(x, y)
+
+        plt.show()
