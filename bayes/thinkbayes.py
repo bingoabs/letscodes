@@ -2089,12 +2089,4 @@ class Pmf3(Pmf):
 
 
 
-def showLine(suite):
-    import matplotlib.pyplot as plt
-    x, y = zip(*suite.Items())
-    plt.plot(x, y)
-    plt.show()
-
-
-
 
