@@ -18,3 +18,6 @@ class Solution(object):
             return int(str[1:]) * -1
         else:
             return int(str)
+
+if __name__ == "__main__":
+    pass

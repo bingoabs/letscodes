@@ -6,19 +6,22 @@ class Solution(object):
         """
         # init, length = 0, len(strs)
 
-        smallest = min(strs, key=lambda str: len(str))
+        sets = list(set(strs))
+        if len(sets) == 0: return ""
+        if len(sets) == 1: return sets[0]
 
+        smallest = min(strs, key=lambda string: len(string))
         if smallest == "":
             return ""
 
-        index = last = len(smallest)
-        isCommonPrefix = False
-        target = ""
+        start, end, index = 0, len(smallest), 0
 
-        while isCommonPrefix != :
-            isCommonPrefix = self.isCommonPrefix(smallest, strs)
-            target = smallest
-            next_index = ""
+        target, isCommonPrefix = "", True
+        while self.isCommonPrefix(smallest[start:index], strs) and index <= end:
+            target = smallest[start:index]
+            index += 1
+
+        return target
 
     def isCommonPrefix(self, target, strs):
         r = True
@@ -32,4 +35,6 @@ class Solution(object):
 
 
 if __name__ == "__main__":
-    pass
+    inp = ["a", "b"]
+    r = Solution().longestCommonPrefix(inp)
+    print(r)
