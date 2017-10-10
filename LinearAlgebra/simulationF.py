@@ -1,3 +1,4 @@
+#-*- coding: utf-8
 from pprint import pprint
 
 
@@ -51,20 +52,49 @@ def purified(matrix):
 
     return matrix
 
+def simplified_to_standard(matrix):
+    # target is to deal the n✖n matrix
+    dim = len(matrix)
+    for index in range(dim):
+        change = 1
+        exchange = index + change
+        # find one the first 
+        while matrix[index][index] == 0.0 and index < dim - 1:
+            matrix[index], matrix[exchange] = matrix[exchange], matrix[index]
+            change += 1
+        if matrix[index][index] == 0.0:
+            continue
+
+        to_unit = matrix[index][index]    
+        matrix[index] = [e/to_unit for e in matrix[index]]
+
+        next_index = index + 1
+        for ano in range(next_index, dim):
+            factor = matrix[ano][index]
+            subtracted = [e*factor for e in matrix[index]]
+            matrix[ano] = subtract_values(matrix[ano], subtracted)
+    return matrix
+
+def subtract_values(subtraction_list, subtracted):
+    for index in range(len(subtraction_list)):
+        subtraction_list[index] = subtraction_list[index] - subtracted[index]
+    return subtraction_list
+
 
 if __name__ == "__main__":
-    data = [
-        # {speed, resistance}
-        (0, 0), 
-        (2, 2.9), 
-        (4, 14.8), 
-        (6, 39.6), 
-        (8, 74.3), 
-        (10, 119)
-    ]
-    # data = [(1, 6), (2, 15), (3, 28)]
-    matrix = create_matrix(data)
-    matrix = count_matrix(matrix)
-    # matrix = purified(matrix)
-    pprint(matrix)
+    # # [{speed, resistance}...]
+    # data = [(0, 0), (2, 2.9), (4, 14.8), (6, 39.6), (8, 74.3), (10, 119)]
+    # # data = [(1, 6), (2, 15), (3, 28)]
+    # matrix = count_matrix(create_matrix(data))
+    # # matrix = purified(matrix)
+    # pprint(matrix)
+
+    # matrix = [
+    #     [4, 0, -3, -7],
+    #     [-6, 9, 9, 9],
+    #     [7, -5, 10, 19],
+    #     [-1, 2, 4, -1],
+    # ]
+    # r = simplified_to_standard(matrix)
+    # pprint(r)
 
