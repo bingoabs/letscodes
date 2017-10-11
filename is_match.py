@@ -44,11 +44,31 @@ class Solution(object):
 
     def check(self, s, p):
         print(" s: {}; p: {}".format(s, p))
+        if len(s) == 0: return True
+        if len(p) == 0: return False
 
-        start = p[0]
-        if start == "*":
+        if "*" in p:
+            pre, last = p.split("*", 1)
+            if self.same(pre, s[:len(pre)]):
+                return False
+            left = self.subtract(s[len(pre):], pre[-1])
+            return self.check(left, last)
+        else:
             pass
-            
+
+    def subtract(self, subtracted, substraction):
+        for i in range(len(subtracted)):
+            if subtracted[i] != substraction:
+                break
+        return subtracted[i:]
+
+
+    def same(self, expression, string):
+        for index in range(len(expression)):
+            if expression[index] != string[index] and expression[index] != ".":
+                return False
+        return True
+
         
 
 
