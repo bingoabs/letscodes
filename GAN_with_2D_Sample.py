@@ -15,4 +15,10 @@ def generate_lut(img):
     density_img = transform.resize(img, (num_grids, num_grids))
     x_acculation = numpy.sum(density_img, axis=1)
     # find lack math knowledge, so left out.
+    pass
+
+
+if __name__ == "__main__":
+    pass 
+    
     
