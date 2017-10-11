@@ -38,23 +38,12 @@ class Solution(object):
 
         for i in range(len(p)):
             if p[i] in [start, "."]:
-                is_match = self.isMatch(s, p[i:])
+                is_match = self.check(s, p[i:])
                 if is_match: return True
-
-        index = s.find(start)
-        point_index = s.find(".")
-        
-        if index == -1 and point_index == -1:
-            return False
-        elif index == -1:
-            return self.check(s[1:], p[point_index+1:])
-        else:
-            return self.check(s[1:], p[index+1:])
+        return False
 
     def check(self, s, p):
         print(" s: {}; p: {}".format(s, p))
-        if s == p or len(s) == 0: return True
-        if len(p) == 0: return False
 
         start = p[0]
         if start == "*":
