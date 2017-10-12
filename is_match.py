@@ -114,17 +114,31 @@ class Solution(object):
 
         return result
 
-    def comps(sl, pl):
+    def comps(self, sl, pl):
+        print("comps sl: {}; pl: {}".format(sl, pl))
         start = sl[0]
         for index in range(len(pl)):
-            if pl[index] in [start, ".", ".*"]:
+            if pl[index] in [start, ".", ".*"] or pl[index][0:1] == start[0]:
                 if self.comp(sl, pl[index:]):
                     return True
         return False
 
-    def comp(sl, pl):
-        # todo just compare the start to end..
-        return True
+    def comp(self, sl, pl):
+        print("comp sl: {}; pl: {}".format(sl, pl))
+        if sl == pl: return True
+        if len(sl) == 0: return True
+        if len(pl) == 0: return False
+        start = pl[0]
+        if start == ".*":
+            return self.end_with(sl, pl[1:])
+        else:
+            # start = "." or start == pl[0]
+            return self.comp(sl[1:], pl[1:])
+
+    def end_with(self, sl, left):
+        s = "".join(sl)
+        left = "".join(left)
+        return s.endswith(left)
 
 def test_split():
     s = Solution()
@@ -135,10 +149,11 @@ def test_split():
 
 if __name__ == "__main__":
     # s, p = "ab", ".*c"
-    # s = Solution().isMatch(s, p)
-    # print(s)
+    s, p = "aa", "a"
+    s = Solution().isMatch(s, p)
+    print(s)
 
-    test_split()
+    # test_split()
 
 
 
