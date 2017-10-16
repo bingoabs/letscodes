@@ -11,13 +11,23 @@ class Solution(object):
         :type needle: str
         :rtype: int
         """
-        pass
-
+        n_length = len(needle)
+        if n_length and len(haystack) >= n_length:
+            index = 0
+            while len(haystack[index:]) >= n_length:
+                if needle == haystack[index:n_length + index]:
+                    return index
+                index += 1
+            return -1
+        elif len(haystack) < n_length:
+            return -1
+        else:
+            return 0
 
 
 
 if __name__ == "__main__":
-    haystack, needle = "", ""
-    s = Source().strStr(haystack, needle)
+    haystack, needle = "mississippi", "a"
+    s = Solution().strStr(haystack, needle)
     print(s)
 
