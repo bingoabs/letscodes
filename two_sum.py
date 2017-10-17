@@ -25,4 +25,3 @@ if __name__ == "__main__":
     nums = [2, 3, 4]
     target = 6
     r = Solution().twoSum(nums, target)
-    print r
