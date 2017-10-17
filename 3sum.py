@@ -37,31 +37,38 @@ class Solution(object):
             result.append([0, 0, 0])
         if len(zeros):
             bigs.append(0)
-
-        b_len, s_len = len(bigs), len(smalls)
-
-        if b_len:
-            min_in_bigs, max_in_bigs = min(bigs), max(bigs)
-            all_two = self.combination(smalls, start=min_in_bigs, end=max_in_bigs)
-            for i in all_two:
-                if i[2] in bigs:
-                    result.append(i)
-        if s_len:
-            min_in_smalls, max_in_smalls = min(smalls), max(smalls)
-            all_two = self.combination(bigs, start=min_in_smalls, end=max_in_smalls)
-            for i in all_two:
-                if i[2] in smalls:
-                    result.append(i)
+        smalls.sort(); bigs.sort()
+        if bigs:
+            min_in_bigs, max_in_bigs = bigs[0], bigs[-1]
+            result += self.combination(smalls, start=min_in_bigs, end=max_in_bigs, comp=bigs)
+        if smalls:
+            min_in_smalls, max_in_smalls = smalls[0], smalls[-1]
+            result += self.combination(bigs, start=min_in_smalls, end=max_in_smalls, comp=smalls)
 
         return self.set(result)
 
-    def combination(self, l, start=None, end=None):
+    def combination(self, l, start=None, end=None, comp=None):
+        middle = []
         l_len, rs= len(l), []
         for i in range(l_len):
             for j in range(i+1, l_len):
                 rest = 0 - l[i] - l[j]
                 if rest >= start and rest <= end:
-                    rs.append([l[i], l[j], rest])
+                    middle.append([l[i], l[j], rest])
+        index_of_middle, index_of_comp = 0, 0
+        max_index_of_middle, max_index_of_comp = len(middle) - 1, len(comp) - 1
+        while index_of_middle <= max_index_of_middle and index_of_comp <= max_index_of_comp:
+            middle_ele, comp_ele = middle[index_of_middle], comp[index_of_comp]
+            rest = middle_ele[2]
+            if rest == comp_ele:
+                index_of_comp += 1
+                index_of_middle += 1
+                rs.append(middle_ele)
+            elif rest < comp_ele:
+                index_of_middle += 1
+            elif rest > comp_ele:
+                index_of_comp += 1
+
         return rs
 
     def set(self, results):
