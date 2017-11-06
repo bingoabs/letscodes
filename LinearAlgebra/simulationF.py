@@ -89,12 +89,12 @@ if __name__ == "__main__":
     # # matrix = purified(matrix)
     # pprint(matrix)
 
-    # matrix = [
-    #     [4, 0, -3, -7],
-    #     [-6, 9, 9, 9],
-    #     [7, -5, 10, 19],
-    #     [-1, 2, 4, -1],
-    # ]
-    # r = simplified_to_standard(matrix)
-    # pprint(r)
+    matrix = [
+        [1, 2, -1, 1, 0, 0],
+        [-3, -5, 0, 0, 1, 0],
+        [4, 6, -1, 0, 0, 1],
+    ]
+
+    r = simplified_to_standard(matrix)
+    pprint(r)
 

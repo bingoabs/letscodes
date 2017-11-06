@@ -16,6 +16,30 @@ class Solution(object):
         :type l2: ListNode
         :rtype: Listnode
         """
+        if l1 and l2:
+          pass
+        else:
+          return []
+        r = ListNode(None)
+        rr = r
+        while l1.val and l2.val:
+          if l1.val > l2.val:
+              r.next = ListNode(l1.val)
+              l1 = l1.next
+              r = r.next
+          else:
+            r.next = ListNode(l2.val)
+            l2 = l2.next
+            r = r.next
+        while l2.val:
+          r.next = ListNode(l2.val)
+          l2 = l2.next
+          r = r.next
+        while l1.val:
+          r.next = ListNode(l1.val)
+          r = r.next
+          l1 = l1.next
+        return rr
         
 
 
